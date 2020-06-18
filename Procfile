@@ -1,1 +1,1 @@
-web: main.go
+web: C:\Users\admin\go\bin\newalifoutbot.exe
