@@ -1,1 +1,1 @@
-web: newalifoutbot
+web: main.go
