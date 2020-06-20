@@ -1,10 +1,10 @@
 package database
 
 import (
+	"github.com/shohrukh56/newalifoutbot/app/models"
 	"database/sql"
 	"fmt"
 	log "github.com/sirupsen/logrus"
-	"github.com/shohrukh56/newalifoutbot/app/models"
 )
 
 func CreateUser(user models.User) (models.User, error) {
@@ -20,6 +20,7 @@ func CreateUser(user models.User) (models.User, error) {
 
 	return user, nil
 }
+
 
 func FindUserByID(user_id int) (user models.User) {
 
@@ -53,9 +54,10 @@ func GetCurrentNotifications(chatID int64) ([]models.Notification, error) {
 		ntf    models.Notification
 		output []models.Notification
 	)
-	pool.Prepare("GetCurrentNotifications", query)
+pool.Prepare("GetCurrentNotifications", query)
 	fmt.Println(query)
 	rows, _ := pool.Query("GetCurrentNotifications")
+
 
 	for rows.Next() {
 		err = rows.Scan(&ntf.ChatID, &ntf.MsgID, &ntf.IsSent, &ntf.IsDeleted, &ntf.CheckedAt, &ntf.LeavingTime, &ntf.ArrivalTime, &ntf.Status)

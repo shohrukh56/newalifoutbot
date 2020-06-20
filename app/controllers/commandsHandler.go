@@ -1,11 +1,11 @@
 package controllers
 
 import (
-	"fmt"
-	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 	. "github.com/shohrukh56/newalifoutbot/app/models"
 	"github.com/shohrukh56/newalifoutbot/database"
 	"github.com/shohrukh56/newalifoutbot/tools/cache"
+	"fmt"
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 	"strconv"
 	"strings"
 	"time"
@@ -22,8 +22,10 @@ var ReasonsCommands = []string{CommandWasInHospital, CommandTransportProblem, Co
 	CommandWasInUniversity, CommandToPartner, CommandBuyGoodsForOffice, CommandToNationalBank,
 	CommandToTaxInspection, CommandHouseholdWork, CommandTiredWantRest, CommandExam, CommandOutOffice, CommandRemoteWork}
 
-func FindReasonCommands(command string) bool {
-	for _, i := range ReasonsCommands {
+var timeCommands = []string{"08-00", "14-00", "09-00", "15-00", "10-00", "16-00", "11-00", "17-00", "12-00", "18-00", "13-00"}
+
+func FindReasonAndTimeCommands(command string, searchCommands []string) bool {
+	for _, i := range searchCommands {
 		if i == command {
 			return true
 		}
@@ -104,7 +106,7 @@ func unknownMSGHandler(params ...string) tgbotapi.MessageConfig {
 	}
 	msg = tgbotapi.NewMessage(user.ChatID, text)
 
-	user.SetState(user.State.GetName())
+	user.SetState("initial")
 
 	cache.Set(strconv.Itoa(user.UserID), user)
 
@@ -427,12 +429,6 @@ func LastPageHandler(params ...string) tgbotapi.MessageConfig {
 	user.SetState("initial")
 	fmt.Println(MsgID, "MSGID")
 	cache.Set(strconv.Itoa(user.UserID), user)
-	//frm := "Хорошо, спасибо "
-	//if ActiveRemoteWork == true {
-	//	frm = "Все приняли, спасибо, удачи😉"
-	//}
-	//msg.Text = fmt.Sprintf("%s\n %s\n %s\n\nВы ошиблись?\nНажмите, чтобы изменить:\n <a>/open%s</a>\n", CommentReason, ArrivalTime, frm,MsgID)
-	//msg.ParseMode = "HTML"
 	msg.ReplyMarkup = user.State.GetReplyButtons()
 
 	return msg

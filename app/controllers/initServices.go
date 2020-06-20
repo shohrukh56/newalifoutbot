@@ -5,11 +5,11 @@ import (
 	"errors"
 	"fmt"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
-	log "github.com/sirupsen/logrus"
 	tg "github.com/shohrukh56/newalifoutbot/app/inits"
 	. "github.com/shohrukh56/newalifoutbot/app/models"
 	"github.com/shohrukh56/newalifoutbot/database"
 	"github.com/shohrukh56/newalifoutbot/tools/cache"
+	log "github.com/sirupsen/logrus"
 	"regexp"
 	"strconv"
 	"strings"
@@ -123,6 +123,7 @@ func (s AService) MsgUpdateSrvc() tgbotapi.MessageConfig {
 			fmt.Println("Time not requered")
 			nullT := sql.NullTime{Time: time.Now(), Valid: false}
 			MsgID = storeNotification(user, nullT, nullT, prevState.State.GetName())
+			fmt.Printf("user %s, commentReasom %s, SaveState %s, arrivalTime %s\n\n", user.Username, CommentReason, SaveState, ArrivalTime)
 			fmt.Println(MsgID, "From not required time msgid")
 			frm := "Хорошо, спасибо "
 			msg.Text = fmt.Sprintf("%s\n %s\n %s\n\nВы ошиблись?\nНажмите, чтобы изменить:\n <a>/open%s</a>\n", CommentReason, ArrivalTime, frm, MsgID)
@@ -150,6 +151,7 @@ func getTimeAndStore(sUserID, forwardedMessage string, prevState User) tgbotapi.
 	MsgID = storeNotification(user, SqlArrivalTime, sql.NullTime{}, SaveState)
 	fmt.Printf("3# Stored notification by %s, %s!\n", user.Username, SqlArrivalTime.Time)
 	fmt.Println(MsgID, "From required time msgid")
+	fmt.Printf("user %v, rivalTime %v, SaveState %s", user.Username, SqlArrivalTime, SaveState)
 	frm := "Хорошо, спасибо "
 	if ActiveRemoteWork == true {
 		frm = "Все приняли, спасибо, удачи😉"
@@ -163,7 +165,7 @@ func getTimeAndStore(sUserID, forwardedMessage string, prevState User) tgbotapi.
 }
 
 func getTimeAndReason(forwardedMessage, state string) {
-	if FindReasonCommands(forwardedMessage) == true {
+	if FindReasonAndTimeCommands(forwardedMessage, ReasonsCommands) == true {
 		CommentReason = forwardedMessage
 	}
 	switch state {
@@ -228,7 +230,7 @@ func defineCommands(state, forwardedMessage string) string {
 		return command
 	}
 
-	if state == "TimeHourState" && forwardedMessage != CommandBack && forwardedMessage != CommandMyChoice {
+	if state == "TimeHourState" && forwardedMessage != CommandBack && forwardedMessage != CommandMyChoice && FindReasonAndTimeCommands(forwardedMessage, timeCommands) == true {
 		command = validateCommand(GetTimeMinuteInterface)
 		return command
 	}

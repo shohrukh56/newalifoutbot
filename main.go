@@ -3,14 +3,13 @@ package main
 import (
 	"fmt"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
-	tg "github.com/shohrukh56/newalifoutbot/app/inits"
+	"github.com/shohrukh56/newalifoutbot/app/controllers"
+	"github.com/shohrukh56/newalifoutbot/app/inits"
+	"github.com/shohrukh56/newalifoutbot/configs"
+	"github.com/shohrukh56/newalifoutbot/database"
 	log "github.com/sirupsen/logrus"
 	"io"
 	"net/http"
-	"github.com/shohrukh56/newalifoutbot/app/controllers"
-
-	"github.com/shohrukh56/newalifoutbot/configs"
-	"github.com/shohrukh56/newalifoutbot/database"
 	"os"
 	"sync/atomic"
 	"time"
@@ -41,13 +40,8 @@ func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/"+config.Token, handleNull)
 	go periodicalWorker(time.Minute, sendMessage)
-	host := "0.0.0.0"
-	port, ok := os.LookupEnv("PORT")
-	if !ok {
-		port = "9999"
-	}
-	addres := fmt.Sprintf("%s:%s", host, port)
-	http.ListenAndServe(addres, mux)
+
+	http.ListenAndServe("0.0.0.0:80", mux)
 
 }
 

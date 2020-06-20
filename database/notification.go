@@ -1,9 +1,9 @@
 package database
 
 import (
+	"github.com/shohrukh56/newalifoutbot/app/models"
 	"database/sql"
 	"fmt"
-	"github.com/shohrukh56/newalifoutbot/app/models"
 	"strings"
 
 	log "github.com/sirupsen/logrus"
@@ -24,7 +24,7 @@ func CreateNotification(ntf models.Notification) (string, error) {
 		query = "INSERT INTO tg_notifications(msg_id, chat_id, username, leaving_time, arrival_time, is_sent, status) VALUES ($1, $2, $3, $4, $5, $6, $7);"
 	)
 	pool.Prepare("CreateNotification", query)
-	_, err := pool.Exec(query, ntf.MsgID, ntf.ChatID, ntf.UserName, ntf.LeavingTime, ntf.ArrivalTime, ntf.IsSent, ntf.Status)
+	_, err := pool.Exec( query, ntf.MsgID, ntf.ChatID, ntf.UserName, ntf.LeavingTime, ntf.ArrivalTime, ntf.IsSent, ntf.Status)
 
 	if err != nil {
 		log.Println("Check CreateNotification: ", err)
@@ -83,7 +83,7 @@ func SoftDeleteNotification(msgID string) error {
 	fmt.Println(query)
 	pool.Prepare("SoftDeleteNotification", query)
 
-	_, err = pool.Exec(query)
+	_, err = pool.Exec( query)
 	if err != nil {
 		log.Println("Check SoftDeleteNotification: ", err)
 		return err
@@ -95,7 +95,7 @@ func UpdateCheckinNotificationByMsgID(msgID string) bool {
 
 	query := fmt.Sprintf("UPDATE tg_notifications SET checked_at=now() WHERE msg_id = '%s' and is_deleted=false and checked_at isnull", msgID)
 	fmt.Println(query)
-	pool.Prepare("UpdateCheckinNotificationByMsgID", query)
+	pool.Prepare("UpdateCheckinNotificationByMsgID",query)
 	res, err := pool.Exec(query)
 	if err != nil {
 		log.Println("Check UpdateCheckinNotificationByMsgID: ", err)
@@ -123,8 +123,8 @@ func ExistNotificationByMsgID(msgID string, isCallB bool) (exist bool) {
 		WHERE msg_id = '%s' and %s is_deleted = false);`, msgID, t)
 
 	fmt.Println("msgID", msgID, " ", query)
-	pool.Prepare("ExistNotificationByMsgID", query)
-	rows := pool.QueryRow(query)
+	pool.Prepare("ExistNotificationByMsgID",query)
+	rows := pool.QueryRow( query)
 	err := rows.Scan(&exist)
 	if err != nil && err != sql.ErrNoRows {
 		log.Printf("error checking if row exists '%v' %v", msgID, err)

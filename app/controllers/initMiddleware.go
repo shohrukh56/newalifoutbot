@@ -1,6 +1,8 @@
 package controllers
 
 import (
+	"github.com/shohrukh56/newalifoutbot/app/models"
+	"github.com/shohrukh56/newalifoutbot/database"
 	"bytes"
 	"encoding/json"
 	"fmt"
@@ -9,8 +11,6 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
-	"github.com/shohrukh56/newalifoutbot/app/models"
-	"github.com/shohrukh56/newalifoutbot/database"
 )
 
 var (
