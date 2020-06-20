@@ -18,7 +18,10 @@ type DBConfigType struct {
 	SSLMode          string `yaml:"SSLMode" env:"SSL_MODE" env-default:"disable"`
 	Port             string `yaml:"Port" env:"PORT" env-default:"5433"`
 	Host             string `yaml:"Host" env:"HOST" env-default:"localhost"`
+	URI              string`yaml:"URI" env-default:""`
+	HerokuCLI   	 string`yaml:"HerokuCLI"`
 }
+
 
 //ReadConfig parse configuration file according to YAML format (yaml tag in this case);
 //reads environment variables and overwrites values from the file with the values which was found in the environment (env tag);
@@ -38,12 +41,12 @@ func TGConfig() TelegramConfigType {
 func DBConfig() string {
 	var config DBConfigType
 
-	err := cleanenv.ReadConfig("configs/configs.yaml", &config)
+	err := cleanenv.ReadConfig("configs/configs.example.yaml", &config)
 	if err != nil {
 		log.Panic(err)
 	}
 
-	dbUrl := "host=" + config.Host + " user=" + config.DataBaseUser + " password=" + config.DataBasePassword + " database=" + config.DataBaseName + " sslmode=" + config.SSLMode + " port=" + config.Port
+	dbUrl := "host=" + config.Host + " user=" + config.DataBaseUser + " password=" + config.DataBasePassword + " database=" + config.DataBaseName + " sslmode=" + config.SSLMode + " port=" + config.Port + "URI="+config.URI+"HerokuCLI="+config.HerokuCLI
 
 	return dbUrl
 }

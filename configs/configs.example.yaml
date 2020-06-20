@@ -1,11 +1,12 @@
-DriverName:
-DataBaseUser:
-DataBaseName:
-DataBasePassword:
+DriverName: postgres
+DataBaseUser: lgrpvxzqrlihgn
+DataBaseName: d9ifipcq2pmlh4
+DataBasePassword: e880eb86b9e37ca41c0a55e1260a1a2077624fd1d4ab8865acf4510b4646e99e
 SSLMode:
-Port:
-Host:
-
+Port: 5432
+Host: lgrpvxzqrlihgn
+URI: postgres://lgrpvxzqrlihgn:e880eb86b9e37ca41c0a55e1260a1a2077624fd1d4ab8865acf4510b4646e99e@ec2-18-214-211-47.compute-1.amazonaws.com:5432/d9ifipcq2pmlh4
+HerokuCLI : heroku pg:psql postgresql-curved-24458 --app newalifoutbot
 
 
 token:
