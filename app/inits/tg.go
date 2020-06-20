@@ -3,11 +3,14 @@ package tg
 import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 	log "github.com/sirupsen/logrus"
+	"os"
 )
 
 var (
 	Bot *tgbotapi.BotAPI
 	err error
+	publicURL = os.Getenv("PUBLIC_URL")
+	token = os.Getenv("TOKEN")
 )
 
 func InitTelegramBot(wbh, tkn string) {
@@ -18,9 +21,9 @@ func InitTelegramBot(wbh, tkn string) {
 
 	Bot.Debug = false
 	log.Printf("Authorized on account %s", Bot.Self.UserName)
-	log.Println(wbh + tkn)
+	log.Println(publicURL+token)
 
-	_, err = Bot.SetWebhook(tgbotapi.NewWebhook(wbh + Bot.Token))
+	_, err = Bot.SetWebhook(tgbotapi.NewWebhook(publicURL+token))
 	if err != nil {
 		log.Fatalln(err)
 	}

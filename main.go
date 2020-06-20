@@ -22,7 +22,9 @@ var (
 )
 
 func main() {
-
+	var (
+		port = os.Getenv("PORT")
+	)
 	initLogging()
 	tg.InitTelegramBot(wbh, tkn)
 	log.Println("bot initialized")
@@ -41,8 +43,7 @@ func main() {
 	mux.HandleFunc("/"+config.Token, handleNull)
 	go periodicalWorker(time.Minute, sendMessage)
 
-	http.ListenAndServe("0.0.0.0:80", mux)
-
+	http.ListenAndServe(":"+port, mux)
 }
 
 func sendMessage() {
